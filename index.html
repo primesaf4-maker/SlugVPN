@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SlugVPN | Console</title>
+    <style>
+        :root {
+            --yellow: #FFD700;
+            --bg-black: #000000;
+            --card-bg: #0a0a0a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-black);
+            font-family: 'Consolas', 'Courier New', monospace;
+            color: white;
+            overflow: hidden;
+        }
+
+        /* --- ИНТРО: ЧЕРНЫЙ ЭКРАН + КРУПНАЯ ТАБЛИЧКА --- */
+        #intro-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: transform 1.2s cubic-bezier(0.85, 0, 0.15, 1);
+        }
+
+        .terminal-card {
+            background: var(--card-bg);
+            padding: 50px 60px; /* Увеличили отступы */
+            border-radius: 20px;
+            border: 3px solid var(--yellow); /* Жирнее рамка */
+            box-shadow: 0 0 60px rgba(255, 215, 0, 0.15);
+            min-width: 500px; /* Увеличили ширину */
+            transform: scale(1.1); /* Сделали табличку ближе */
+        }
+
+        .code-line {
+            font-size: 1.4rem; /* Крупнее текст */
+            height: 1.6em;
+            margin-bottom: 10px;
+            color: var(--yellow);
+            display: flex;
+            align-items: center;
+        }
+
+        .white-text {
+            color: #ffffff;
+            text-shadow: 0 0 8px rgba(255,255,255,0.3);
+        }
+
+        /* Кастомный курсор */
+        .cursor::after {
+            content: "";
+            display: inline-block;
+            width: 12px;
+            height: 1.4rem;
+            background-color: var(--yellow);
+            margin-left: 8px;
+            animation: blink 0.7s step-end infinite;
+        }
+
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* --- ОСНОВНОЙ САЙТ --- */
+        #main-site {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 1.2s ease;
+            background: radial-gradient(circle at center, #111 0%, #000 100%);
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .glow {
+            position: absolute;
+            width: 400px; height: 400px;
+            background: var(--yellow);
+            filter: blur(180px);
+            opacity: 0.07;
+            border-radius: 50%;
+            animation: move 10s infinite alternate;
+        }
+
+        @keyframes move {
+            from { transform: translate(-30%, -30%); }
+            to { transform: translate(30%, 30%); }
+        }
+
+        h1 { font-size: 4rem; margin-bottom: 20px; text-transform: uppercase; }
+        h1 span { color: var(--yellow); }
+
+        .btn {
+            background: var(--yellow);
+            color: #000;
+            padding: 22px 50px;
+            border-radius: 100px;
+            text-decoration: none;
+            font-weight: 900;
+            font-size: 1.2rem;
+            transition: 0.4s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 215, 0, 0.4);
+        }
+
+        /* Переключатели */
+        .slide-up { transform: translateY(-100%); }
+        .fade-in { opacity: 1 !important; }
+    </style>
+</head>
+<body>
+
+    <div id="intro-overlay">
+        <div class="terminal-card">
+            <div id="line1" class="code-line"></div>
+            <div id="line2" class="code-line white-text"></div>
+        </div>
+    </div>
+
+    <main id="main-site">
+        <div class="glow"></div>
+        <div style="z-index: 1;">
+            <div style="color:var(--yellow); font-size: 1.2rem; margin-bottom: 10px;">БЕЗОПАСНОСТЬ ПОДТВЕРЖДЕНА</div>
+            <h1>Slug<span>VPN</span></h1>
+            <p style="color:#888; max-width: 500px; margin-bottom: 40px; font-size: 1.1rem;">
+                Ваш трафик зашифрован. Личность скрыта. <br>Доступ ко всем ресурсам открыт.
+            </p>
+            <a href="https://t.me/SlugVPN_bot" class="btn">Перейти к боту</a>
+        </div>
+    </main>
+
+    <script>
+        const l1 = document.getElementById('line1');
+        const l2 = document.getElementById('line2');
+        const overlay = document.getElementById('intro-overlay');
+        const site = document.getElementById('main-site');
+
+        const text1 = ">>> python3 start SlugVPN.py";
+        const text2 = ">>> SlugVPN is active";
+
+        function typeWriter(element, text, speed, callback) {
+            let i = 0;
+            element.classList.add('cursor');
+            function type() {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                } else {
+                    element.classList.remove('cursor');
+                    if (callback) callback();
+                }
+            }
+            type();
+        }
+
+        window.onload = () => {
+            // Запуск анимации
+            setTimeout(() => {
+                typeWriter(l1, text1, 60, () => {
+                    setTimeout(() => {
+                        typeWriter(l2, text2, 40, () => {
+                            // Пауза перед тем как табличка уедет
+                            setTimeout(() => {
+                                overlay.classList.add('slide-up');
+                                site.classList.add('fade-in');
+                            }, 1200);
+                        });
+                    }, 600);
+                });
+            }, 500);
+        };
+    </script>
+</body>
+</html>
