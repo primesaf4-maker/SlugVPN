@@ -2,73 +2,287 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SlugVPN</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SlugVPN 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body, html { 
-            width: 100%; height: 100%; 
-            background-color: #000; 
-            font-family: 'Inter', sans-serif; 
-            color: #fff;
+        :root {
+            --primary: #ffffff;
+            --bg: #000000;
+            --card-bg: #0d0d0d;
+            --text: #ffffff;
+            --text-dim: #999999;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 0.9; /* Максимально плотный межстрочный интервал */
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.5s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ПЛОТНЫЙ ХЕДЕР */
+        header {
+            min-height: 85vh; /* Чуть меньше высоты экрана, чтобы следующий блок поджимал */
             display: flex;
+            flex-direction: column;
             justify-content: center;
-            align-items: center;
-        }
-
-        #main-site {
+            padding: 20px;
             text-align: center;
-            opacity: 0; /* Изначально скрыто */
-            transition: opacity 2s ease; /* Плавность */
         }
 
-        h1 { 
-            font-size: 5rem; 
-            margin-bottom: 20px; 
-            letter-spacing: -2px;
+        h1 {
+            font-size: 6.5rem; 
+            font-weight: 900;
+            letter-spacing: -6px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
         }
-        
-        h1 span { color: #FFD700; }
 
-        p { 
-            font-size: 1.5rem; 
-            color: #888; 
-            margin-bottom: 40px; 
+        .subtitle {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-dim);
+            margin-bottom: 40px;
+            letter-spacing: -1px;
+            line-height: 1.1;
+        }
+
+        /* КНОПКИ */
+        .cta-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+            max-width: 220px;
+            margin: 0 auto;
         }
 
         .btn {
-            display: inline-block;
-            background: #FFD700;
-            color: #000;
-            padding: 20px 50px;
-            border-radius: 50px;
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
             text-decoration: none;
-            font-weight: 800;
-            font-size: 1.2rem;
-            transition: transform 0.3s ease;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-align: center;
+            transition: transform 0.1s;
+            letter-spacing: 1px;
         }
 
-        .btn:hover { transform: scale(1.05); }
+        .btn-primary { background-color: var(--primary); color: #000; }
+        .btn-secondary { border: 1px solid #333; color: #fff; }
+
+        /* ПЛОТНЫЕ КАРТОЧКИ (БЕЗ ОТСТУПОВ) */
+        .features {
+            padding: 0 20px; /* Убрали padding top/bottom */
+        }
+
+        .card {
+            padding: 20px 0; /* Только внутренний вертикальный разделитель */
+            border-bottom: 1px solid #111;
+        }
+
+        .card h3 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 5px;
+            letter-spacing: -3px;
+        }
+
+        .card p {
+            color: var(--text-dim);
+            font-size: 1.4rem;
+            font-weight: 600;
+            line-height: 1.1;
+            letter-spacing: -0.5px;
+        }
+
+        /* ДЕТАЛИ В СТЫК */
+        .simple-details {
+            padding: 30px 20px;
+        }
+
+        .detail-line {
+            display: block;
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: var(--primary);
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: -1.5px;
+        }
+
+        /* ЧАТ */
+        .chat-container {
+            padding: 20px 10px;
+        }
+
+        .phone {
+            width: 100%;
+            background: #050505;
+            border-radius: 20px;
+            border: 2px solid #111;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-h {
+            padding: 15px;
+            border-bottom: 1px solid #111;
+            font-size: 1rem;
+            font-weight: 900;
+            text-align: center;
+            color: #333;
+        }
+
+        .chat-b {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            min-height: 380px;
+        }
+
+        .m {
+            max-width: 85%;
+            padding: 14px;
+            border-radius: 15px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            line-height: 1.1;
+            opacity: 0;
+            transform: translateY(5px);
+            transition: all 0.3s ease;
+        }
+
+        .m.show { opacity: 1; transform: translateY(0); }
+
+        .in { background: #1a1a1a; align-self: flex-start; border-bottom-left-radius: 2px; }
+        .out { background: #fff; color: #000; align-self: flex-end; border-bottom-right-radius: 2px; }
+
+        /* ФУТЕР В ПЛОТНУЮ */
+        footer {
+            padding: 40px 20px;
+        }
+
+        .footer-text {
+            font-size: 1rem;
+            font-weight: 800;
+            color: #222;
+        }
+
+        .support {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 900;
+            font-size: 2.5rem; /* ТГ контакт - самая большая деталь в конце */
+            display: block;
+            letter-spacing: -2px;
+        }
     </style>
 </head>
 <body>
 
-    <main id="main-site">
-        <h1>Slug<span>VPN</span></h1>
-        <p>Ваша безопасность под защитой.</p>
-        <a href="https://t.me/SlugVPN_bot" class="btn">Подключиться</a>
-    </main>
+    <header>
+        <h1 class="reveal">SLUG<br>VPN</h1>
+        <p class="subtitle reveal">ТВОЙ ИНТЕРНЕТ.<br>ТВОИ ПРАВИЛА.</p>
+        <div class="cta-group reveal">
+            <a href="https://t.me/slugvpn_bot" class="btn btn-primary">ПОДКЛЮЧИТЬ</a>
+            <a href="https://t.me/slugvpn" class="btn btn-secondary">КАНАЛ</a>
+        </div>
+    </header>
+
+    <section class="features">
+        <div class="card reveal">
+            <h3>СКОРОСТЬ</h3>
+            <p>БЕЗ ОЖИДАНИЙ.</p>
+        </div>
+        <div class="card reveal">
+            <h3>ЗАЩИТА</h3>
+            <p>АНОНИМНО.</p>
+        </div>
+    </section>
+
+    <div class="simple-details reveal">
+        <span class="detail-line">НИЗКИЙ ПИНГ</span>
+        <span class="detail-line">ВЕЗДЕ</span>
+    </div>
+
+    <section class="chat-container reveal">
+        <div class="phone">
+            <div class="chat-h">MESSAGES</div>
+            <div class="chat-body chat-b" id="chat">
+                <div class="m in">Ничего не грузит...</div>
+                <div class="m in">Есть нормальный VPN?</div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p class="footer-text">2026 SLUGVPN</p>
+        <a href="https://t.me/oxyhead" class="support">@OXYHEAD</a>
+    </footer>
 
     <script>
-        const site = document.getElementById('main-site');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    if(entry.target.classList.contains('chat-container')) startChat();
+                }
+            });
+        }, { threshold: 0.05 });
 
-        // Когда страница загрузилась, плавно проявляем сайт
-        window.onload = () => {
-            setTimeout(() => {
-                site.style.opacity = '1';
-            }, 500); // Небольшая задержка перед началом проявления
-        };
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        let chatDone = false;
+        function startChat() {
+            if (chatDone) return;
+            chatDone = true;
+            const chat = document.getElementById('chat');
+            
+            document.querySelectorAll('.m.in').forEach((m, i) => {
+                setTimeout(() => m.classList.add('show'), 300 + (i * 600));
+            });
+
+            const responses = [
+                'SlugVPN.',
+                'Бот: @slugvpn_bot'
+            ];
+
+            responses.forEach((text, i) => {
+                setTimeout(() => {
+                    const div = document.createElement('div');
+                    div.className = 'm out show';
+                    div.innerText = text;
+                    chat.appendChild(div);
+                }, 1800 + (i * 900));
+            });
+        }
     </script>
 </body>
 </html>
+
